@@ -10,6 +10,7 @@ Machine learning detector for network attacks, with an LLM agent that explains e
 - Removing the destination port feature did not change the result
 - Isolation Forest (no labels, trained on normal traffic only): caught 0 port scans, AUC 0.56
 - Finding: individual port scan flows look like normal traffic, so a per-flow anomaly detector cannot catch them. A scan is a pattern across many flows.
+- On DDoS, an attack it never studied: Random Forest caught 58% with 0 false alarms, Isolation Forest caught 17% with 9.5% false alarms
 
 ## Limits
 - This file is balanced (55% attacks), which is not realistic. A near-perfect score here does not prove the detector works on a real network.
@@ -17,7 +18,7 @@ Machine learning detector for network attacks, with an LLM agent that explains e
 ## Roadmap
 - [x] Data cleaning and exploration
 - [x] Random Forest and Isolation Forest experiments
-- [ ] Test on an attack the model has never seen (DDoS)
+- [x] Test on an attack the model has never seen (DDoS)
 - [ ] Test on a realistic mix of mostly normal traffic
 - [ ] Capture and test on traffic from my own lab
 - [ ] Agent that sends each alert to an LLM for severity, explanation and next step
