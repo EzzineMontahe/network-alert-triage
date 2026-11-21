@@ -102,3 +102,21 @@ def to_model_features(lab: pd.DataFrame) -> pd.DataFrame:
     for col in TIME_COLUMNS:
         out[col] = out[col] * 1_000_000
     return out
+
+
+def fix_payload(t: pd.DataFrame) -> pd.DataFrame:
+    """Approximate the dataset's 'content only' packet sizes by removing a 54-byte envelope."""
+    t = t.copy()
+    per_packet = [
+        "Fwd Packet Length Max", "Fwd Packet Length Min", "Fwd Packet Length Mean",
+        "Bwd Packet Length Max", "Bwd Packet Length Min", "Bwd Packet Length Mean",
+        "Min Packet Length", "Max Packet Length", "Packet Length Mean",
+        "Avg Fwd Segment Size", "Avg Bwd Segment Size", "Average Packet Size",
+    ]
+    for c in per_packet:
+        t[c] = (t[c] - 54).clip(lower=0)
+    t["Total Length of Fwd Packets"] = (t["Total Length of Fwd Packets"] - 54 * t["Total Fwd Packets"]).clip(lower=0)
+    t["Total Length of Bwd Packets"] = (t["Total Length of Bwd Packets"] - 54 * t["Total Backward Packets"]).clip(lower=0)
+    t["Subflow Fwd Bytes"] = t["Total Length of Fwd Packets"]
+    t["Subflow Bwd Bytes"] = t["Total Length of Bwd Packets"]
+    return t

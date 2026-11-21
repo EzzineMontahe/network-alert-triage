@@ -5,7 +5,7 @@ import joblib
 import numpy as np
 import pandas as pd
 
-MODEL_PATH = Path(__file__).resolve().parent.parent / "models" / "rf3.joblib"
+MODEL_PATH = Path(__file__).resolve().parent.parent / "models" / "rf5.joblib"
 
 _bundle = joblib.load(MODEL_PATH)
 _model = _bundle["model"]
