@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from groq import Groq
 
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+MODEL = "openai/gpt-oss-120b"
 _client = None
 
 

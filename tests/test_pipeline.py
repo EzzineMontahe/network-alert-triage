@@ -56,4 +56,18 @@ def test_analyze_route_on_real_lab_file():
     assert reply.status_code == 200
     assert body["flows"] == 1001
     assert any(a["distinct_ports"] == 1000 for a in body["alerts"])
-    
+
+from types import SimpleNamespace
+
+from src import triage
+
+
+def test_triage_reads_the_llm_json_reply(monkeypatch):
+    text = 'Sure: {"severity": "high", "likely_false_positive": false, "explanation": "x", "next_step": "y"}'
+    reply = SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=text))])
+    fake = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=lambda **kwargs: reply)))
+    monkeypatch.setattr(triage, "_get_client", lambda: fake)
+
+    verdict = triage.triage({"type": "PortScan"})
+    assert verdict["severity"] == "high"
+    assert verdict["likely_false_positive"] is False
