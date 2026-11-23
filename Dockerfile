@@ -1,0 +1,6 @@
+FROM python:3.14-slim
+WORKDIR /app
+COPY requirements-docker.txt .
+RUN pip install --no-cache-dir -r requirements-docker.txt
+COPY src ./src
+COPY models ./models
