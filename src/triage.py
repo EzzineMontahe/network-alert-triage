@@ -6,8 +6,14 @@ from dotenv import load_dotenv
 from groq import Groq
 
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
-_client = Groq()
-MODEL = "openai/gpt-oss-120b"
+_client = None
+
+
+def _get_client():
+    global _client
+    if _client is None:
+        _client = Groq()
+    return _client
 
 SYSTEM = """You are a SOC analyst assistant. You receive one network alert as JSON,
 produced by a machine learning detector that sometimes makes mistakes.
@@ -24,7 +30,7 @@ local network chatter. A low avg_confidence means the detector is unsure."""
 
 def triage(alert: dict) -> dict:
     """Return the LLM's verdict for one alert as a dict."""
-    reply = _client.chat.completions.create(
+    reply =_get_client().chat.completions.create(
         model=MODEL,
         messages=[
             {"role": "system", "content": SYSTEM},

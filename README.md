@@ -2,6 +2,8 @@
 
 A machine learning detector for network attacks, plus an LLM agent that groups the detections into alerts and explains each one. Everything runs locally.
 
+![tests](https://github.com/EzzineMontahe/network-alert-triage/actions/workflows/tests.yml/badge.svg) 
+
 ![Dashboard](docs/dashboard.png)
 
 ## What it does
